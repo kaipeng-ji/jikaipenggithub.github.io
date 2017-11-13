@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-10-16T02:10:44.000Z</updated>
+  <updated>2017-11-13T10:35:48.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>page</title>
+    <link href="http://yoursite.com/2017/11/13/page/"/>
+    <id>http://yoursite.com/2017/11/13/page/</id>
+    <published>2017-11-13T10:09:36.000Z</published>
+    <updated>2017-11-13T10:35:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>#iOS获取当前app的名称和版本号</p><p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=0&id=438597206&auto=1&height=32"></iframe><br>    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];</p><blockquote><p>app名称</p></blockquote><pre><code>NSString *app_Name = [infoDictionary objectForKey:@&quot;CFBundleDisplayName&quot;];</code></pre><blockquote><p>app版本</p></blockquote><pre><code>NSString *app_Version = [infoDictionary objectForKey:@&quot;CFBundleShortVersionString&quot;];</code></pre><blockquote><p>app build版本</p></blockquote><pre><code>NSString *app_build = [infoDictionary objectForKey:@&quot;CFBundleVersion&quot;];</code></pre><blockquote><p>手机序列号</p></blockquote><pre><code>NSString* identifierNumber = [[UIDevice currentDevice] uniqueIdentifier];NSLog(@&quot;手机序列号: %@&quot;,identifierNumber);</code></pre><blockquote><p>手机别名： 用户定义的名称</p></blockquote><pre><code>NSString* userPhoneName = [[UIDevice currentDevice] name];NSLog(@&quot;手机别名: %@&quot;, userPhoneName);</code></pre><blockquote><p>设备名称</p></blockquote><pre><code>NSString* deviceName = [[UIDevice currentDevice] systemName];NSLog(@&quot;设备名称: %@&quot;,deviceName );</code></pre><blockquote><p>手机系统版本</p></blockquote><pre><code>NSString* phoneVersion = [[UIDevice currentDevice] systemVersion];NSLog(@&quot;手机系统版本: %@&quot;, phoneVersion);</code></pre><blockquote><p>手机型号</p></blockquote><pre><code>NSString* phoneModel = [[UIDevice currentDevice] model];NSLog(@&quot;手机型号: %@&quot;,phoneModel );</code></pre><blockquote><p>地方型号  （国际化区域名称）</p></blockquote><pre><code>NSString* localPhoneModel = [[UIDevice currentDevice] localizedModel];NSLog(@&quot;国际化区域名称: %@&quot;,localPhoneModel );NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];</code></pre><blockquote><p>当前应用名称</p></blockquote><pre><code>NSString *appCurName = [infoDictionary objectForKey:@&quot;CFBundleDisplayName&quot;];NSLog(@&quot;当前应用名称：%@&quot;,appCurName);</code></pre><blockquote><p>当前应用软件版本  比如：1.0.1</p></blockquote><pre><code>NSString *appCurVersion = [infoDictionary objectForKey:@&quot;CFBundleShortVersionString&quot;];NSLog(@&quot;当前应用软件版本:%@&quot;,appCurVersion);</code></pre><blockquote><p>当前应用版本号码  int类型</p></blockquote><pre><code>NSString *appCurVersionNum = [infoDictionary objectForKey:@&quot;CFBundleVersion&quot;];NSLog(@&quot;当前应用版本号码：%@&quot;,appCurVersionNum);</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;#iOS获取当前app的名称和版本号&lt;/p&gt;
+&lt;p&gt;&lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; width=&quot;298&quot; height=&quot;52&quot; src=&quot;//music.163.c
+      
+    
+    </summary>
+    
+    
+      <category term="IOS" scheme="http://yoursite.com/tags/IOS/"/>
+    
+  </entry>
   
   <entry>
     <title>为Hexo Next主题添加分享及打赏功能</title>
