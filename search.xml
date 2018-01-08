@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[iOS本地通知]]></title>
-    <url>%2F2017%2F11%2F30%2FiOS%E6%9C%AC%E5%9C%B0%E9%80%9A%E7%9F%A5%2F</url>
-    <content type="text"><![CDATA[iOS 本地通知(Local Notification) 通知的注意事项：1、app在前台运行的时候，通知不会展示出来 2、点击通知，默认自动打开推送通知的app3、不管app是否打开，通知都可以正常发出 创建本地通知 创建自定义声音的时候，一定要注意在main bunlde加入声音文件，在项目主路径下Build Phases-copy Bundle Resources下面添加音频文件 //创建本地通知 - (void)fireLocalMessage{ UILocalNotification *localNote = [[UILocalNotification alloc]init]; localNote.timeZone = [NSTimeZone defaultTimeZone]; //本地通知的时间 localNote.fireDate = [NSDate date]; //设置通知间隔为每天 localNote.repeatInterval = NSCalendarUnitDay; // localNote.alertTitle = @&quot;记账时间到了，赶快来记一笔吧&quot;; localNote.alertBody = @&quot;记账时间到了，赶快来记一笔吧&quot;; localNote.hasAction = YES; //音效-苹果本地通知支持的音频格式。 aiff wav caf // localNote.soundName = UILocalNotificationDefaultSoundName; localNote.soundName = @&quot;push.caf&quot;; //接收到通知设置bade localNote.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1; //设置额外信息,appdelegate中收到通知,可以根据不同的通知的额外信息确定跳转到不同的界面 NSString *hourString = [self.leftArray objectAtIndex:hour]; NSString *minuteString = [self.rightArray objectAtIndex:minute]; NSString *string = [NSString stringWithFormat:@&quot;每天 %@:%@&quot;,hourString,minuteString]; localNote.userInfo = @{@&quot;name&quot;:string}; // 3.调用通知 [[UIApplication sharedApplication] scheduleLocalNotification:localNote]; } AppDelegate.m文件里面的处理- (void)setLocalNotion:(UIApplication *)application launchOptions:(NSDictionary *)launchOptions{ //打开app时候,消除掉badge [application setApplicationIconBadgeNumber:0]; if ([[UIDevice currentDevice].systemVersion doubleValue] &gt;= 8.0) { // iOS8以后 本地通知必须注册(获取权限) UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert categories:nil]; [application registerUserNotificationSettings:settings]; } //如果是这个key有值,代表是杀死的程序接收到本地通知跳转 if (launchOptions[UIApplicationLaunchOptionsLocationKey]) { // 根据这种方式查看launchOptions的内容 NSLog(@&quot;跳转到指定页面&quot;); } } - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{ NSLog(@&quot;收到本地通知&quot;); // 可以让用户跳转到指定界面 app在前台接收到通知直接跳转界面不太好,所以要判断一下,是从后台进入前台还是本身就在前台 if (application.applicationState == UIApplicationStateInactive) {// 进入前台时候 NSLog(@&quot;跳转到指定界面&quot;); // 如果接收到不同的通知,跳转到不同的界面: NSLog(@&quot;进行界面的跳转&quot;); NSLog(@&quot;%@&quot;, notification.userInfo); } else{ // NSInteger badgeNumber = 0; // [notification setApplicationIconBadgeNumber:badgeNumber]; } }]]></content>
+    <title><![CDATA[iOS字典初始化的坑]]></title>
+    <url>%2F2017%2F11%2F30%2FNSDictionary%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%9D%91%2F</url>
+    <content type="text"><![CDATA[iOS 字典初始化的坑 最近在做项目的时候遇到了一种崩溃原因，bugly反馈的崩溃信息是这样的-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[1] JIZHANG + 289980 我们采用的字典初始化方式是字面量的方式，他是iOS 6.0以后新支持的初始化方法 NSDictionary *dictionary =@{@&quot;key1&quot; : value1,@&quot;key2&quot; : value2,@&quot;key3&quot; : value3}; 后来经过测试发现，如果value值为nil时会导致崩溃，崩溃信息和测试代码如下 测试代码 NSString *value = nil; NSDictionary *params = @{@&quot;openid&quot;:value}; 崩溃信息这种字典的初始化方式，要保证不会崩溃，就要对每一个value进行判断，确保不为nil时才插入数据。 还有一种初始化方式是采用标准的初始化方式-以下这种方式当插入value值为nil时，之后的值并不会插入，但是不会崩溃 NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:openid,@&quot;openid&quot;,nickname,@&quot;nickname&quot;,sex,@&quot;sex&quot;,headimgurl,@&quot;headimgurl&quot;,unionid,@&quot;unionid&quot;,nil];]]></content>
       <categories>
         <category>iOS</category>
       </categories>
       <tags>
         <tag>iOS</tag>
-        <tag>通知</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[iOS获取tabbarvc的bug]]></title>
-    <url>%2F2017%2F11%2F30%2FiOS%E8%8E%B7%E5%8F%96tabbarvc%E7%9A%84bug%2F</url>
-    <content type="text"><![CDATA[iOS 获取tabbar的rootViewController遇到的坑 大家获取tabbarVC通常有两种取法 一种是JZTabBarViewController *tabVC = (JZTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController; 另一种是AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate; JZTabBarViewController *tabVC = (JZTabBarViewController *)appDelegate.window.rootViewController; 之前我们项目中采用的是第一种方式取得，然后调用tabVC.selectedIndex = 0方法，上线之后腾讯bugly反馈了一个崩溃的bug，bug反馈信息为-[UIViewController setSelectedIndex:]: unrecognized selector sent to instance 0x125da5d60,这个方法是没有找到该方法，我猜可能是因为用第一种方法取的viewcontroller可能不是tabbarvc，因为我们在项目中有使用[UIApplication sharedApplication].keyWindow加过自定义的view，我猜可能是这个原因，当把加的自定义的view注释掉之后，以上两个方法都可以确保每次拿到的vc是tabbarvc]]></content>
-      <categories>
-        <category>iOS</category>
-      </categories>
-      <tags>
-        <tag>iOS</tag>
-        <tag>Bug</tag>
+        <tag>踩过的坑</tag>
       </tags>
   </entry>
   <entry>
@@ -34,6 +22,30 @@
       <tags>
         <tag>iOS</tag>
         <tag>绘图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS获取tabbarvc的bug]]></title>
+    <url>%2F2017%2F11%2F30%2FiOS%E8%8E%B7%E5%8F%96tabbarvc%E7%9A%84%E5%9D%91%2F</url>
+    <content type="text"><![CDATA[iOS 获取tabbar的rootViewController遇到的坑 大家获取tabbarVC通常有两种取法 一种是JZTabBarViewController *tabVC = (JZTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController; 另一种是AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate; JZTabBarViewController *tabVC = (JZTabBarViewController *)appDelegate.window.rootViewController; 之前我们项目中采用的是第一种方式取得，然后调用tabVC.selectedIndex = 0方法，上线之后腾讯bugly反馈了一个崩溃的bug，bug反馈信息为-[UIViewController setSelectedIndex:]: unrecognized selector sent to instance 0x125da5d60,这个方法是没有找到该方法，我猜可能是因为用第一种方法取的viewcontroller可能不是tabbarvc，因为我们在项目中有使用[UIApplication sharedApplication].keyWindow加过自定义的view，我猜可能是这个原因，当把加的自定义的view注释掉之后，以上两个方法都可以确保每次拿到的vc是tabbarvc]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>Bug</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS本地通知]]></title>
+    <url>%2F2017%2F11%2F30%2FiOS%E6%9C%AC%E5%9C%B0%E9%80%9A%E7%9F%A5%2F</url>
+    <content type="text"><![CDATA[iOS 本地通知(Local Notification) 通知的注意事项：1、app在前台运行的时候，通知不会展示出来 2、点击通知，默认自动打开推送通知的app3、不管app是否打开，通知都可以正常发出 创建本地通知 创建自定义声音的时候，一定要注意在main bunlde加入声音文件，在项目主路径下Build Phases-copy Bundle Resources下面添加音频文件 //创建本地通知 - (void)fireLocalMessage{ UILocalNotification *localNote = [[UILocalNotification alloc]init]; localNote.timeZone = [NSTimeZone defaultTimeZone]; //本地通知的时间 localNote.fireDate = [NSDate date]; //设置通知间隔为每天 localNote.repeatInterval = NSCalendarUnitDay; // localNote.alertTitle = @&quot;记账时间到了，赶快来记一笔吧&quot;; localNote.alertBody = @&quot;记账时间到了，赶快来记一笔吧&quot;; localNote.hasAction = YES; //音效-苹果本地通知支持的音频格式。 aiff wav caf // localNote.soundName = UILocalNotificationDefaultSoundName; localNote.soundName = @&quot;push.caf&quot;; //接收到通知设置bade localNote.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1; //设置额外信息,appdelegate中收到通知,可以根据不同的通知的额外信息确定跳转到不同的界面 NSString *hourString = [self.leftArray objectAtIndex:hour]; NSString *minuteString = [self.rightArray objectAtIndex:minute]; NSString *string = [NSString stringWithFormat:@&quot;每天 %@:%@&quot;,hourString,minuteString]; localNote.userInfo = @{@&quot;name&quot;:string}; // 3.调用通知 [[UIApplication sharedApplication] scheduleLocalNotification:localNote]; } AppDelegate.m文件里面的处理- (void)setLocalNotion:(UIApplication *)application launchOptions:(NSDictionary *)launchOptions{ //打开app时候,消除掉badge [application setApplicationIconBadgeNumber:0]; if ([[UIDevice currentDevice].systemVersion doubleValue] &gt;= 8.0) { // iOS8以后 本地通知必须注册(获取权限) UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert categories:nil]; [application registerUserNotificationSettings:settings]; } //如果是这个key有值,代表是杀死的程序接收到本地通知跳转 if (launchOptions[UIApplicationLaunchOptionsLocationKey]) { // 根据这种方式查看launchOptions的内容 NSLog(@&quot;跳转到指定页面&quot;); } } - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{ NSLog(@&quot;收到本地通知&quot;); // 可以让用户跳转到指定界面 app在前台接收到通知直接跳转界面不太好,所以要判断一下,是从后台进入前台还是本身就在前台 if (application.applicationState == UIApplicationStateInactive) {// 进入前台时候 NSLog(@&quot;跳转到指定界面&quot;); // 如果接收到不同的通知,跳转到不同的界面: NSLog(@&quot;进行界面的跳转&quot;); NSLog(@&quot;%@&quot;, notification.userInfo); } else{ // NSInteger badgeNumber = 0; // [notification setApplicationIconBadgeNumber:badgeNumber]; } }]]></content>
+      <categories>
+        <category>iOS,本地通知</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>通知</tag>
       </tags>
   </entry>
   <entry>

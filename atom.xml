@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-05T10:05:53.000Z</updated>
+  <updated>2018-01-08T07:53:54.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,19 +17,20 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>iOS本地通知</title>
-    <link href="http://yoursite.com/2017/11/30/iOS%E6%9C%AC%E5%9C%B0%E9%80%9A%E7%9F%A5/"/>
-    <id>http://yoursite.com/2017/11/30/iOS本地通知/</id>
+    <title>iOS字典初始化的坑</title>
+    <link href="http://yoursite.com/2017/11/30/NSDictionary%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%9D%91/"/>
+    <id>http://yoursite.com/2017/11/30/NSDictionary初始化的坑/</id>
     <published>2017-11-30T02:29:02.000Z</published>
-    <updated>2018-01-05T10:05:53.000Z</updated>
+    <updated>2018-01-08T07:53:54.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="iOS-本地通知-Local-Notification"><a href="#iOS-本地通知-Local-Notification" class="headerlink" title="iOS 本地通知(Local Notification)"></a>iOS 本地通知(Local Notification)</h2><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=0&id=438597206&auto=1&height=32"></iframe><blockquote><p>通知的注意事项：1、<code>app在前台运行的时候，通知不会展示出来</code> 2、<code>点击通知，默认自动打开推送通知的app</code>3、<code>不管app是否打开，通知都可以正常发出</code></p></blockquote><h3 id="创建本地通知"><a href="#创建本地通知" class="headerlink" title="创建本地通知"></a>创建本地通知</h3><blockquote><p>创建自定义声音的时候，一定要注意在main bunlde加入声音文件，在项目主路径下<code>Build Phases</code>-<code>copy Bundle Resources</code>下面添加音频文件</p></blockquote><pre><code>//创建本地通知- (void)fireLocalMessage{    UILocalNotification *localNote = [[UILocalNotification alloc]init];    localNote.timeZone = [NSTimeZone defaultTimeZone];    //本地通知的时间    localNote.fireDate = [NSDate date];    //设置通知间隔为每天    localNote.repeatInterval = NSCalendarUnitDay;//    localNote.alertTitle = @&quot;记账时间到了，赶快来记一笔吧&quot;;    localNote.alertBody = @&quot;记账时间到了，赶快来记一笔吧&quot;;    localNote.hasAction = YES;    //音效-苹果本地通知支持的音频格式。  aiff wav caf//    localNote.soundName = UILocalNotificationDefaultSoundName;    localNote.soundName = @&quot;push.caf&quot;;    //接收到通知设置bade    localNote.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1;    //设置额外信息,appdelegate中收到通知,可以根据不同的通知的额外信息确定跳转到不同的界面    NSString *hourString = [self.leftArray objectAtIndex:hour];    NSString *minuteString = [self.rightArray objectAtIndex:minute];    NSString *string = [NSString stringWithFormat:@&quot;每天 %@:%@&quot;,hourString,minuteString];    localNote.userInfo = @{@&quot;name&quot;:string};    // 3.调用通知    [[UIApplication sharedApplication] scheduleLocalNotification:localNote];}</code></pre><h3 id="AppDelegate-m文件里面的处理"><a href="#AppDelegate-m文件里面的处理" class="headerlink" title="AppDelegate.m文件里面的处理"></a>AppDelegate.m文件里面的处理</h3><pre><code>- (void)setLocalNotion:(UIApplication *)application launchOptions:(NSDictionary *)launchOptions{    //打开app时候,消除掉badge    [application setApplicationIconBadgeNumber:0];    if ([[UIDevice currentDevice].systemVersion doubleValue] &gt;= 8.0) {        // iOS8以后 本地通知必须注册(获取权限)        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert categories:nil];        [application registerUserNotificationSettings:settings];    }    //如果是这个key有值,代表是杀死的程序接收到本地通知跳转    if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {        // 根据这种方式查看launchOptions的内容        NSLog(@&quot;跳转到指定页面&quot;);    }}- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{    NSLog(@&quot;收到本地通知&quot;);    // 可以让用户跳转到指定界面 app在前台接收到通知直接跳转界面不太好,所以要判断一下,是从后台进入前台还是本身就在前台    if (application.applicationState == UIApplicationStateInactive) {// 进入前台时候        NSLog(@&quot;跳转到指定界面&quot;);        // 如果接收到不同的通知,跳转到不同的界面:        NSLog(@&quot;进行界面的跳转&quot;);        NSLog(@&quot;%@&quot;, notification.userInfo);    } else{//        NSInteger badgeNumber = 0;//        [notification setApplicationIconBadgeNumber:badgeNumber];    }}</code></pre>]]></content>
+    <content type="html"><![CDATA[<h2 id="iOS-字典初始化的坑"><a href="#iOS-字典初始化的坑" class="headerlink" title="iOS 字典初始化的坑"></a>iOS 字典初始化的坑</h2><blockquote><p> 最近在做项目的时候遇到了一种崩溃原因，bugly反馈的崩溃信息是这样的<code>-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[1]JIZHANG + 289980</code></p></blockquote><p>我们采用的字典初始化方式是字面量的方式，他是iOS 6.0以后新支持的初始化方法</p><pre><code>NSDictionary *dictionary =@{@&quot;key1&quot; : value1,@&quot;key2&quot; : value2,@&quot;key3&quot; : value3};</code></pre><p>后来经过测试发现，如果value值为nil时会导致崩溃，崩溃信息和测试代码如下</p><ul><li><p>测试代码</p><pre><code>NSString *value = nil;           NSDictionary *params = @{@&quot;openid&quot;:value};</code></pre></li><li><p>崩溃信息<br><img src="/Users/admin/Desktop/blog/public/image/WX20180108-153600.png" alt=""><br>这种字典的初始化方式，要保证不会崩溃，就要对每一个value进行判断，确保不为nil时才插入数据。</p></li></ul><p>还有一种初始化方式是采用标准的初始化方式-以下这种方式当插入value值为nil时，之后的值并不会插入，但是不会崩溃</p><pre><code>NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:openid,@&quot;openid&quot;,nickname,@&quot;nickname&quot;,sex,@&quot;sex&quot;,headimgurl,@&quot;headimgurl&quot;,unionid,@&quot;unionid&quot;,nil];</code></pre>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;iOS-本地通知-Local-Notification&quot;&gt;&lt;a href=&quot;#iOS-本地通知-Local-Notification&quot; class=&quot;headerlink&quot; title=&quot;iOS 本地通知(Local Notification)&quot;&gt;&lt;/a&gt;iOS 
+        &lt;h2 id=&quot;iOS-字典初始化的坑&quot;&gt;&lt;a href=&quot;#iOS-字典初始化的坑&quot; class=&quot;headerlink&quot; title=&quot;iOS 字典初始化的坑&quot;&gt;&lt;/a&gt;iOS 字典初始化的坑&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt; 最近在做项目的时候遇到了一种崩溃原因，b
       
     
     </summary>
@@ -39,34 +40,7 @@
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
-      <category term="通知" scheme="http://yoursite.com/tags/%E9%80%9A%E7%9F%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>iOS获取tabbarvc的bug</title>
-    <link href="http://yoursite.com/2017/11/30/iOS%E8%8E%B7%E5%8F%96tabbarvc%E7%9A%84bug/"/>
-    <id>http://yoursite.com/2017/11/30/iOS获取tabbarvc的bug/</id>
-    <published>2017-11-30T02:29:02.000Z</published>
-    <updated>2018-01-08T05:36:07.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="iOS-获取tabbar的rootViewController遇到的坑"><a href="#iOS-获取tabbar的rootViewController遇到的坑" class="headerlink" title="iOS 获取tabbar的rootViewController遇到的坑"></a>iOS 获取tabbar的rootViewController遇到的坑</h2><blockquote><p>大家获取tabbarVC通常有两种取法</p></blockquote><ul><li><p>一种是<code>JZTabBarViewController *tabVC = (JZTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;</code></p></li><li><p>另一种是<code>AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;  JZTabBarViewController *tabVC = (JZTabBarViewController *)appDelegate.window.rootViewController;</code></p></li></ul><p>之前我们项目中采用的是第一种方式取得，然后调用<code>tabVC.selectedIndex = 0</code>方法，上线之后<code>腾讯bugly</code>反馈了一个崩溃的<code>bug</code>，bug反馈信息为<code>-[UIViewController setSelectedIndex:]: unrecognized selector sent to instance 0x125da5d60</code>,这个方法是没有找到该方法，我猜可能是因为用第一种方法取的<code>viewcontroller</code>可能不是<code>tabbarvc</code>，因为我们在项目中有使用<code>[UIApplication sharedApplication].keyWindow</code>加过自定义的view，我猜可能是这个原因，当把加的自定义的view注释掉之后，以上两个方法都可以确保每次拿到的vc是<code>tabbarvc</code></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;iOS-获取tabbar的rootViewController遇到的坑&quot;&gt;&lt;a href=&quot;#iOS-获取tabbar的rootViewController遇到的坑&quot; class=&quot;headerlink&quot; title=&quot;iOS 获取tabbar的rootViewC
-      
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://yoursite.com/categories/iOS/"/>
-    
-    
-      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
-    
-      <category term="Bug" scheme="http://yoursite.com/tags/Bug/"/>
+      <category term="踩过的坑" scheme="http://yoursite.com/tags/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
     
   </entry>
   
@@ -94,6 +68,60 @@
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
       <category term="绘图" scheme="http://yoursite.com/tags/%E7%BB%98%E5%9B%BE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS获取tabbarvc的bug</title>
+    <link href="http://yoursite.com/2017/11/30/iOS%E8%8E%B7%E5%8F%96tabbarvc%E7%9A%84%E5%9D%91/"/>
+    <id>http://yoursite.com/2017/11/30/iOS获取tabbarvc的坑/</id>
+    <published>2017-11-30T02:29:02.000Z</published>
+    <updated>2018-01-08T05:36:07.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="iOS-获取tabbar的rootViewController遇到的坑"><a href="#iOS-获取tabbar的rootViewController遇到的坑" class="headerlink" title="iOS 获取tabbar的rootViewController遇到的坑"></a>iOS 获取tabbar的rootViewController遇到的坑</h2><blockquote><p>大家获取tabbarVC通常有两种取法</p></blockquote><ul><li><p>一种是<code>JZTabBarViewController *tabVC = (JZTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;</code></p></li><li><p>另一种是<code>AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;  JZTabBarViewController *tabVC = (JZTabBarViewController *)appDelegate.window.rootViewController;</code></p></li></ul><p>之前我们项目中采用的是第一种方式取得，然后调用<code>tabVC.selectedIndex = 0</code>方法，上线之后<code>腾讯bugly</code>反馈了一个崩溃的<code>bug</code>，bug反馈信息为<code>-[UIViewController setSelectedIndex:]: unrecognized selector sent to instance 0x125da5d60</code>,这个方法是没有找到该方法，我猜可能是因为用第一种方法取的<code>viewcontroller</code>可能不是<code>tabbarvc</code>，因为我们在项目中有使用<code>[UIApplication sharedApplication].keyWindow</code>加过自定义的view，我猜可能是这个原因，当把加的自定义的view注释掉之后，以上两个方法都可以确保每次拿到的vc是<code>tabbarvc</code></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;iOS-获取tabbar的rootViewController遇到的坑&quot;&gt;&lt;a href=&quot;#iOS-获取tabbar的rootViewController遇到的坑&quot; class=&quot;headerlink&quot; title=&quot;iOS 获取tabbar的rootViewC
+      
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://yoursite.com/categories/iOS/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+      <category term="Bug" scheme="http://yoursite.com/tags/Bug/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS本地通知</title>
+    <link href="http://yoursite.com/2017/11/30/iOS%E6%9C%AC%E5%9C%B0%E9%80%9A%E7%9F%A5/"/>
+    <id>http://yoursite.com/2017/11/30/iOS本地通知/</id>
+    <published>2017-11-30T02:29:02.000Z</published>
+    <updated>2018-01-08T05:39:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="iOS-本地通知-Local-Notification"><a href="#iOS-本地通知-Local-Notification" class="headerlink" title="iOS 本地通知(Local Notification)"></a>iOS 本地通知(Local Notification)</h2><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=0&id=438597206&auto=1&height=32"></iframe><blockquote><p>通知的注意事项：1、<code>app在前台运行的时候，通知不会展示出来</code> 2、<code>点击通知，默认自动打开推送通知的app</code>3、<code>不管app是否打开，通知都可以正常发出</code></p></blockquote><h3 id="创建本地通知"><a href="#创建本地通知" class="headerlink" title="创建本地通知"></a>创建本地通知</h3><blockquote><p>创建自定义声音的时候，一定要注意在main bunlde加入声音文件，在项目主路径下<code>Build Phases</code>-<code>copy Bundle Resources</code>下面添加音频文件</p></blockquote><pre><code>//创建本地通知- (void)fireLocalMessage{    UILocalNotification *localNote = [[UILocalNotification alloc]init];    localNote.timeZone = [NSTimeZone defaultTimeZone];    //本地通知的时间    localNote.fireDate = [NSDate date];    //设置通知间隔为每天    localNote.repeatInterval = NSCalendarUnitDay;//    localNote.alertTitle = @&quot;记账时间到了，赶快来记一笔吧&quot;;    localNote.alertBody = @&quot;记账时间到了，赶快来记一笔吧&quot;;    localNote.hasAction = YES;    //音效-苹果本地通知支持的音频格式。  aiff wav caf//    localNote.soundName = UILocalNotificationDefaultSoundName;    localNote.soundName = @&quot;push.caf&quot;;    //接收到通知设置bade    localNote.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1;    //设置额外信息,appdelegate中收到通知,可以根据不同的通知的额外信息确定跳转到不同的界面    NSString *hourString = [self.leftArray objectAtIndex:hour];    NSString *minuteString = [self.rightArray objectAtIndex:minute];    NSString *string = [NSString stringWithFormat:@&quot;每天 %@:%@&quot;,hourString,minuteString];    localNote.userInfo = @{@&quot;name&quot;:string};    // 3.调用通知    [[UIApplication sharedApplication] scheduleLocalNotification:localNote];}</code></pre><h3 id="AppDelegate-m文件里面的处理"><a href="#AppDelegate-m文件里面的处理" class="headerlink" title="AppDelegate.m文件里面的处理"></a>AppDelegate.m文件里面的处理</h3><pre><code>- (void)setLocalNotion:(UIApplication *)application launchOptions:(NSDictionary *)launchOptions{    //打开app时候,消除掉badge    [application setApplicationIconBadgeNumber:0];    if ([[UIDevice currentDevice].systemVersion doubleValue] &gt;= 8.0) {        // iOS8以后 本地通知必须注册(获取权限)        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert categories:nil];        [application registerUserNotificationSettings:settings];    }    //如果是这个key有值,代表是杀死的程序接收到本地通知跳转    if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {        // 根据这种方式查看launchOptions的内容        NSLog(@&quot;跳转到指定页面&quot;);    }}- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{    NSLog(@&quot;收到本地通知&quot;);    // 可以让用户跳转到指定界面 app在前台接收到通知直接跳转界面不太好,所以要判断一下,是从后台进入前台还是本身就在前台    if (application.applicationState == UIApplicationStateInactive) {// 进入前台时候        NSLog(@&quot;跳转到指定界面&quot;);        // 如果接收到不同的通知,跳转到不同的界面:        NSLog(@&quot;进行界面的跳转&quot;);        NSLog(@&quot;%@&quot;, notification.userInfo);    } else{//        NSInteger badgeNumber = 0;//        [notification setApplicationIconBadgeNumber:badgeNumber];    }}</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;iOS-本地通知-Local-Notification&quot;&gt;&lt;a href=&quot;#iOS-本地通知-Local-Notification&quot; class=&quot;headerlink&quot; title=&quot;iOS 本地通知(Local Notification)&quot;&gt;&lt;/a&gt;iOS 
+      
+    
+    </summary>
+    
+      <category term="iOS,本地通知" scheme="http://yoursite.com/categories/iOS-%E6%9C%AC%E5%9C%B0%E9%80%9A%E7%9F%A5/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+      <category term="通知" scheme="http://yoursite.com/tags/%E9%80%9A%E7%9F%A5/"/>
     
   </entry>
   
