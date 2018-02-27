@@ -13,15 +13,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[iOS本地通知]]></title>
-    <url>%2F2017%2F11%2F30%2FiOS%E6%9C%AC%E5%9C%B0%E9%80%9A%E7%9F%A5%2F</url>
-    <content type="text"><![CDATA[iOS 本地通知(Local Notification) 通知的注意事项：1、app在前台运行的时候，通知不会展示出来 2、点击通知，默认自动打开推送通知的app3、不管app是否打开，通知都可以正常发出 创建本地通知 创建自定义声音的时候，一定要注意在main bunlde加入声音文件，在项目主路径下Build Phases-copy Bundle Resources下面添加音频文件 //创建本地通知 - (void)fireLocalMessage{ UILocalNotification *localNote = [[UILocalNotification alloc]init]; localNote.timeZone = [NSTimeZone defaultTimeZone]; //本地通知的时间 localNote.fireDate = [NSDate date]; //设置通知间隔为每天 localNote.repeatInterval = NSCalendarUnitDay; // localNote.alertTitle = @&quot;记账时间到了，赶快来记一笔吧&quot;; localNote.alertBody = @&quot;记账时间到了，赶快来记一笔吧&quot;; localNote.hasAction = YES; //音效-苹果本地通知支持的音频格式。 aiff wav caf // localNote.soundName = UILocalNotificationDefaultSoundName; localNote.soundName = @&quot;push.caf&quot;; //接收到通知设置bade localNote.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1; //设置额外信息,appdelegate中收到通知,可以根据不同的通知的额外信息确定跳转到不同的界面 NSString *hourString = [self.leftArray objectAtIndex:hour]; NSString *minuteString = [self.rightArray objectAtIndex:minute]; NSString *string = [NSString stringWithFormat:@&quot;每天 %@:%@&quot;,hourString,minuteString]; localNote.userInfo = @{@&quot;name&quot;:string}; // 3.调用通知 [[UIApplication sharedApplication] scheduleLocalNotification:localNote]; } AppDelegate.m文件里面的处理- (void)setLocalNotion:(UIApplication *)application launchOptions:(NSDictionary *)launchOptions{ //打开app时候,消除掉badge [application setApplicationIconBadgeNumber:0]; if ([[UIDevice currentDevice].systemVersion doubleValue] &gt;= 8.0) { // iOS8以后 本地通知必须注册(获取权限) UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert categories:nil]; [application registerUserNotificationSettings:settings]; } //如果是这个key有值,代表是杀死的程序接收到本地通知跳转 if (launchOptions[UIApplicationLaunchOptionsLocationKey]) { // 根据这种方式查看launchOptions的内容 NSLog(@&quot;跳转到指定页面&quot;); } } - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{ NSLog(@&quot;收到本地通知&quot;); // 可以让用户跳转到指定界面 app在前台接收到通知直接跳转界面不太好,所以要判断一下,是从后台进入前台还是本身就在前台 if (application.applicationState == UIApplicationStateInactive) {// 进入前台时候 NSLog(@&quot;跳转到指定界面&quot;); // 如果接收到不同的通知,跳转到不同的界面: NSLog(@&quot;进行界面的跳转&quot;); NSLog(@&quot;%@&quot;, notification.userInfo); } else{ // NSInteger badgeNumber = 0; // [notification setApplicationIconBadgeNumber:badgeNumber]; } }]]></content>
+    <title><![CDATA[iOS上传到App Store一直出错]]></title>
+    <url>%2F2017%2F11%2F30%2FiOS%E4%B8%8A%E4%BC%A0%E5%8C%85%E5%88%B0App%20Store%E5%87%BA%E9%94%99%2F</url>
+    <content type="text"><![CDATA[上周使用app Loader上传到App Store的包一直显示上传到App Store出错，如下图所示，没有任何其他的提示，在别人的Mac电脑上能成功上传，后来以为是Xcode的缘故，于是把Xcode 卸载之后重新安装还是出错，后来在stackoverflow找到了解决办法,具体操作如下 出错的截图 解决办法打开终端按步骤来 1. cd ~ 2. mv .itmstransporter/ .old_itmstransporter/ 3. &quot;/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporte]]></content>
       <categories>
-        <category>iOS,本地通知</category>
+        <category>iOS</category>
       </categories>
       <tags>
         <tag>iOS</tag>
-        <tag>通知</tag>
+        <tag>踩过的坑</tag>
       </tags>
   </entry>
   <entry>
@@ -34,6 +34,18 @@
       <tags>
         <tag>iOS</tag>
         <tag>绘图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[iOS本地通知]]></title>
+    <url>%2F2017%2F11%2F30%2FiOS%E6%9C%AC%E5%9C%B0%E9%80%9A%E7%9F%A5%2F</url>
+    <content type="text"><![CDATA[iOS 本地通知(Local Notification) 通知的注意事项：1、app在前台运行的时候，通知不会展示出来 2、点击通知，默认自动打开推送通知的app3、不管app是否打开，通知都可以正常发出 创建本地通知 创建自定义声音的时候，一定要注意在main bunlde加入声音文件，在项目主路径下Build Phases-copy Bundle Resources下面添加音频文件 //创建本地通知 - (void)fireLocalMessage{ UILocalNotification *localNote = [[UILocalNotification alloc]init]; localNote.timeZone = [NSTimeZone defaultTimeZone]; //本地通知的时间 localNote.fireDate = [NSDate date]; //设置通知间隔为每天 localNote.repeatInterval = NSCalendarUnitDay; // localNote.alertTitle = @&quot;记账时间到了，赶快来记一笔吧&quot;; localNote.alertBody = @&quot;记账时间到了，赶快来记一笔吧&quot;; localNote.hasAction = YES; //音效-苹果本地通知支持的音频格式。 aiff wav caf // localNote.soundName = UILocalNotificationDefaultSoundName; localNote.soundName = @&quot;push.caf&quot;; //接收到通知设置bade localNote.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber+1; //设置额外信息,appdelegate中收到通知,可以根据不同的通知的额外信息确定跳转到不同的界面 NSString *hourString = [self.leftArray objectAtIndex:hour]; NSString *minuteString = [self.rightArray objectAtIndex:minute]; NSString *string = [NSString stringWithFormat:@&quot;每天 %@:%@&quot;,hourString,minuteString]; localNote.userInfo = @{@&quot;name&quot;:string}; // 3.调用通知 [[UIApplication sharedApplication] scheduleLocalNotification:localNote]; } AppDelegate.m文件里面的处理- (void)setLocalNotion:(UIApplication *)application launchOptions:(NSDictionary *)launchOptions{ //打开app时候,消除掉badge [application setApplicationIconBadgeNumber:0]; if ([[UIDevice currentDevice].systemVersion doubleValue] &gt;= 8.0) { // iOS8以后 本地通知必须注册(获取权限) UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert categories:nil]; [application registerUserNotificationSettings:settings]; } //如果是这个key有值,代表是杀死的程序接收到本地通知跳转 if (launchOptions[UIApplicationLaunchOptionsLocationKey]) { // 根据这种方式查看launchOptions的内容 NSLog(@&quot;跳转到指定页面&quot;); } } - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{ NSLog(@&quot;收到本地通知&quot;); // 可以让用户跳转到指定界面 app在前台接收到通知直接跳转界面不太好,所以要判断一下,是从后台进入前台还是本身就在前台 if (application.applicationState == UIApplicationStateInactive) {// 进入前台时候 NSLog(@&quot;跳转到指定界面&quot;); // 如果接收到不同的通知,跳转到不同的界面: NSLog(@&quot;进行界面的跳转&quot;); NSLog(@&quot;%@&quot;, notification.userInfo); } else{ // NSInteger badgeNumber = 0; // [notification setApplicationIconBadgeNumber:badgeNumber]; } }]]></content>
+      <categories>
+        <category>iOS,本地通知</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>通知</tag>
       </tags>
   </entry>
   <entry>

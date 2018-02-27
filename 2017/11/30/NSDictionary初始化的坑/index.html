@@ -130,12 +130,12 @@
 <meta property="og:site_name" content="往事亦如风 お">
 <meta property="og:description" content="iOS 字典初始化的坑  最近在做项目的时候遇到了一种崩溃原因，bugly反馈的崩溃信息是这样的-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[1] JIZHANG + 289980  我们采用的字典初始化方式是字面量的方式，他是iOS 6.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2017/11/30/NSDictionary初始化的坑/public/image/WX20180108-153600.png">
-<meta property="og:updated_time" content="2018-01-08T07:56:43.000Z">
+<meta property="og:image" content="http://yoursite.com/image/WX20180108-160235.png">
+<meta property="og:updated_time" content="2018-01-08T08:05:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS字典初始化的坑">
 <meta name="twitter:description" content="iOS 字典初始化的坑  最近在做项目的时候遇到了一种崩溃原因，bugly反馈的崩溃信息是这样的-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[1] JIZHANG + 289980  我们采用的字典初始化方式是字面量的方式，他是iOS 6.">
-<meta name="twitter:image" content="http://yoursite.com/2017/11/30/NSDictionary初始化的坑/public/image/WX20180108-153600.png">
+<meta name="twitter:image" content="http://yoursite.com/image/WX20180108-160235.png">
 
 
 
@@ -451,7 +451,7 @@ JIZHANG + 289980</code></p>
 <pre><code>NSString *value = nil;
            NSDictionary *params = @{@&quot;openid&quot;:value};
 </code></pre></li>
-<li><p>崩溃信息<br><img src="public/image/WX20180108-153600.png" alt=""><br>这种字典的初始化方式，要保证不会崩溃，就要对每一个value进行判断，确保不为nil时才插入数据。</p>
+<li><p>崩溃信息<br><img src="/image/WX20180108-160235.png" alt=""><br>这种字典的初始化方式，要保证不会崩溃，就要对每一个value进行判断，确保不为nil时才插入数据。</p>
 </li>
 </ul>
 <p>还有一种初始化方式是采用标准的初始化方式-以下这种方式当插入value值为nil时，之后的值并不会插入，但是不会崩溃</p>
@@ -534,8 +534,8 @@ JIZHANG + 289980</code></p>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/30/iOS本地通知/" rel="next" title="iOS本地通知">
-                <i class="fa fa-chevron-left"></i> iOS本地通知
+              <a href="/2017/11/30/iOS上传包到App Store出错/" rel="next" title="iOS上传到App Store一直出错">
+                <i class="fa fa-chevron-left"></i> iOS上传到App Store一直出错
               </a>
             
           </div>
@@ -645,7 +645,7 @@ JIZHANG + 289980</code></p>
             
               <a href="/archives/index.html">
             
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
