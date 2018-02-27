@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-08T08:05:29.000Z</updated>
+  <updated>2018-02-27T07:45:02.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,39 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>iOS字典初始化的坑</title>
-    <link href="http://yoursite.com/2017/11/30/NSDictionary%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%9D%91/"/>
-    <id>http://yoursite.com/2017/11/30/NSDictionary初始化的坑/</id>
-    <published>2017-11-30T02:29:02.000Z</published>
-    <updated>2018-01-08T08:05:29.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="iOS-字典初始化的坑"><a href="#iOS-字典初始化的坑" class="headerlink" title="iOS 字典初始化的坑"></a>iOS 字典初始化的坑</h2><blockquote><p> 最近在做项目的时候遇到了一种崩溃原因，bugly反馈的崩溃信息是这样的<code>-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[1]JIZHANG + 289980</code></p></blockquote><p>我们采用的字典初始化方式是字面量的方式，他是iOS 6.0以后新支持的初始化方法</p><pre><code>NSDictionary *dictionary =@{@&quot;key1&quot; : value1,@&quot;key2&quot; : value2,@&quot;key3&quot; : value3};</code></pre><p>后来经过测试发现，如果value值为nil时会导致崩溃，崩溃信息和测试代码如下</p><ul><li><p>测试代码</p><pre><code>NSString *value = nil;           NSDictionary *params = @{@&quot;openid&quot;:value};</code></pre></li><li><p>崩溃信息<br><img src="/image/WX20180108-160235.png" alt=""><br>这种字典的初始化方式，要保证不会崩溃，就要对每一个value进行判断，确保不为nil时才插入数据。</p></li></ul><p>还有一种初始化方式是采用标准的初始化方式-以下这种方式当插入value值为nil时，之后的值并不会插入，但是不会崩溃</p><pre><code>NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:openid,@&quot;openid&quot;,nickname,@&quot;nickname&quot;,sex,@&quot;sex&quot;,headimgurl,@&quot;headimgurl&quot;,unionid,@&quot;unionid&quot;,nil];</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;iOS-字典初始化的坑&quot;&gt;&lt;a href=&quot;#iOS-字典初始化的坑&quot; class=&quot;headerlink&quot; title=&quot;iOS 字典初始化的坑&quot;&gt;&lt;/a&gt;iOS 字典初始化的坑&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt; 最近在做项目的时候遇到了一种崩溃原因，b
-      
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://yoursite.com/categories/iOS/"/>
-    
-    
-      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
-    
-      <category term="踩过的坑" scheme="http://yoursite.com/tags/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
-    
-  </entry>
-  
-  <entry>
     <title>iOS上传到App Store一直出错</title>
-    <link href="http://yoursite.com/2017/11/30/iOS%E4%B8%8A%E4%BC%A0%E5%8C%85%E5%88%B0App%20Store%E5%87%BA%E9%94%99/"/>
-    <id>http://yoursite.com/2017/11/30/iOS上传包到App Store出错/</id>
-    <published>2017-11-30T02:29:02.000Z</published>
-    <updated>2018-02-27T07:42:19.000Z</updated>
+    <link href="http://yoursite.com/2018/02/22/iOS%E4%B8%8A%E4%BC%A0%E5%8C%85%E5%88%B0App%20Store%E5%87%BA%E9%94%99/"/>
+    <id>http://yoursite.com/2018/02/22/iOS上传包到App Store出错/</id>
+    <published>2018-02-22T02:29:02.000Z</published>
+    <updated>2018-02-27T07:45:02.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote><p>上周使用<code>app Loader</code>上传到App Store的包一直显示<code>上传到App Store出错</code>，如下图所示，没有任何其他的提示，在别人的Mac电脑上能成功上传，后来以为是<code>Xcode</code>的缘故，于是把Xcode 卸载之后重新安装还是出错，后来在<a href="https://stackoverflow.com/questions/22443425/application-loader-stuck-at-authenticating-with-the-itunes-store-when-uploadin" target="_blank" rel="external">stackoverflow</a>找到了解决办法,具体操作如下</p></blockquote><h3 id="出错的截图"><a href="#出错的截图" class="headerlink" title="出错的截图"></a>出错的截图</h3><p><img src="/image/21_559737_ad795007f8f53b6.png" alt=""></p><h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>打开终端按步骤来</p><pre><code>1.    cd ~  2. mv .itmstransporter/ .old_itmstransporter/  3. &quot;/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporte</code></pre>]]></content>
     
@@ -73,19 +45,20 @@
   </entry>
   
   <entry>
-    <title>iOS绘图</title>
-    <link href="http://yoursite.com/2017/11/30/iOS%E7%BB%98%E5%9B%BE/"/>
-    <id>http://yoursite.com/2017/11/30/iOS绘图/</id>
-    <published>2017-11-30T02:29:02.000Z</published>
-    <updated>2017-11-30T08:32:11.000Z</updated>
+    <title>iOS字典初始化的坑</title>
+    <link href="http://yoursite.com/2018/01/30/NSDictionary%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%9D%91/"/>
+    <id>http://yoursite.com/2018/01/30/NSDictionary初始化的坑/</id>
+    <published>2018-01-30T02:29:02.000Z</published>
+    <updated>2018-02-27T07:44:49.000Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="iOS-绘图"><a href="#iOS-绘图" class="headerlink" title="iOS 绘图"></a>iOS 绘图</h1><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=0&id=438597206&auto=1&height=32"></iframe><blockquote><p>关于下面的绘制图形都是在<code>drawRect</code>方法中，所以我们需要建立一个类叫<code>CustonView</code>，继承于<code>UIView</code>，然后实现<code>drawRect</code>方法。</p></blockquote><h2 id="绘制一个字符串"><a href="#绘制一个字符串" class="headerlink" title="绘制一个字符串"></a>绘制一个字符串</h2><pre><code>UIFont *helveticacabold = [UIFont fontWithName:@&quot;HelveticaNeue-Bold&quot; size:40.f];    NSString *string = @&quot;some String&quot;;    NSDictionary *attibute = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:helveticacabold};    [string drawAtPoint:CGPointMake(40, 200) withAttributes:attibute];</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.34.44.png" alt=""></p><h2 id="将字符串画在一个矩形中"><a href="#将字符串画在一个矩形中" class="headerlink" title="将字符串画在一个矩形中"></a>将字符串画在一个矩形中</h2><pre><code>//画在一个矩形    UIFont *helveticacabold = [UIFont fontWithName:@&quot;HelveticaNeue-Bold&quot; size:40.f];    NSString *string = @&quot;some String&quot;;    NSDictionary *attibute = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:helveticacabold};    [string drawInRect:CGRectMake(40, 200, 100, 100) withAttributes:attibute];</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.36.57.png" alt=""></p><h2 id="获取color的分量信息"><a href="#获取color的分量信息" class="headerlink" title="获取color的分量信息"></a>获取color的分量信息</h2><pre><code>UIColor *steelBlueColor = [UIColor colorWithRed:0.3f green:0.4f blue:0.6f alpha:1.0f];   CGColorRef colorRef = steelBlueColor.CGColor;   const CGFloat *components = CGColorGetComponents(colorRef);   NSUInteger compentsCount = CGColorGetNumberOfComponents(colorRef);   NSUInteger count = 0;   for (count = 0; count &lt; compentsCount; count++) {       NSLog(@&quot;compenent %lu = %.02f&quot;,count+1,components[count]);   }</code></pre><h2 id="绘制线段"><a href="#绘制线段" class="headerlink" title="绘制线段"></a>绘制线段</h2><pre><code>// 1. 为图形上下文选择一个颜色    [[UIColor brownColor] set];    // 2. 获取图形上下文的句柄    CGContextRef currentContext = UIGraphicsGetCurrentContext();    // 3. 设置线条的宽度 第一个参数是当前图形上下文 ， 第二个是线条的宽度    CGContextSetLineWidth(currentContext, 10.0f);    // 4. 设置线条的起点    CGContextMoveToPoint(currentContext, 50.0f, 10.0f);    // 5. 设置终点    // 线    CGContextAddLineToPoint(currentContext, 100.0f, 200.0f);    // 矩形//    CGContextAddRect(currentContext, CGRectMake(50, 50, 100, 100));    // 6. 绘制上下文    CGContextStrokePath(currentContext);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.39.30.png" alt=""></p><h2 id="绘制一个X"><a href="#绘制一个X" class="headerlink" title="绘制一个X"></a>绘制一个X</h2><pre><code>// 1. 创建一个可变的句柄    CGMutablePathRef path = CGPathCreateMutable();    // 2. 充满屏幕    CGRect screenBounds = [UIScreen mainScreen].bounds;    // 3. 开始top-left    CGPathMoveToPoint(path, NULL, screenBounds.origin.x, screenBounds.origin.y);    CGPathAddLineToPoint(path, NULL, screenBounds.size.width, screenBounds.size.height);    // 4. 开始另一条线，top-right    CGPathMoveToPoint(path, NULL, screenBounds.size.width, screenBounds.origin.y);    // 5. 画线，form top-right to bottom-left    CGPathAddLineToPoint(path, NULL, screenBounds.origin.x, screenBounds.size.height);    // 6. 获取图形上下文    CGContextRef currentRef = UIGraphicsGetCurrentContext();    CGContextAddPath(currentRef, path);    [[UIColor blueColor] setStroke];    CGContextDrawPath(currentRef, kCGPathStroke);    CGPathRelease(path);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.40.04.png" alt=""></p><h2 id="绘制矩形"><a href="#绘制矩形" class="headerlink" title="绘制矩形"></a>绘制矩形</h2><pre><code>CGMutablePathRef path = CGPathCreateMutable();    CGRect rectangle = CGRectMake(10.0f, 10.0f, 200.0f, 300.0f);    CGPathAddRect(path, NULL, rectangle);    CGContextRef currentContext = UIGraphicsGetCurrentContext();    CGContextAddPath(currentContext, path);    //充满矩形的颜色    [[UIColor yellowColor] setFill];    //画线的颜色    [[UIColor brownColor] setStroke];    CGContextSetLineWidth(currentContext, 10.0f);    CGContextDrawPath(currentContext, kCGPathFillStroke);    CGPathRelease(path);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.41.24.png" alt=""></p><h2 id="为形状添加阴影"><a href="#为形状添加阴影" class="headerlink" title="为形状添加阴影"></a>为形状添加阴影</h2><pre><code>// 1. 获取图形上下文    CGContextRef currentContext = UIGraphicsGetCurrentContext();//     避免第二个矩形会被应用，需要保存上下文    CGContextSaveGState(currentContext);//     2. 设置阴影 参数： 1.图形上下文 2. 偏移量-偏移量相对于将要应用阴影的形状的右边和底部。x偏移量越大，阴影更向形状的右边延伸，y偏移量越大，阴影更向形状的底部延伸。 3. 应用到阴影的模糊值，·    CGContextSetShadowWithColor(currentContext, CGSizeMake(10.0f, 10.0f), 20.0f, [UIColor grayColor].CGColor);    CGMutablePathRef path = CGPathCreateMutable();    CGRect firstRect = CGRectMake(55.0f, 60.0f, 150.0f, 150.0f);    CGPathAddRect(path, NULL, firstRect);    CGContextAddPath(currentContext, path);    [[UIColor colorWithRed:0.20f green:0.60f blue:0.80f alpha:1.0f] setFill];    CGContextDrawPath(currentContext, kCGPathFill);    CGPathRelease(path);//    回到之前上下文的状态   避免第二个矩形会被应用，    CGContextRestoreGState(currentContext);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.44.02.png" alt=""></p><h2 id="创建和绘制渐变"><a href="#创建和绘制渐变" class="headerlink" title="创建和绘制渐变"></a>创建和绘制渐变</h2><pre><code>// 1. 创建色彩空间    CGContextRef currentContext = UIGraphicsGetCurrentContext();//    CGContextSaveGState(currentContext);    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();    UIColor *startColor = [UIColor orangeColor];    CGFloat *startColorComponents = (CGFloat *)CGColorGetComponents([startColor CGColor]);    UIColor *endColor = [UIColor blueColor];    CGFloat *endColorComponents = (CGFloat *)CGColorGetComponents([endColor CGColor]);    // 2. 获取开始颜色和终点颜色的分量之后，我们将他们放入一个扁平数组传递到CGGradientCreateWithColorComonents函数    CGFloat colorComponents[8] = {        startColorComponents[0],        startColorComponents[1],        startColorComponents[2],        startColorComponents[3],        //终点颜色分量        endColorComponents[0],        endColorComponents[1],        endColorComponents[2],        endColorComponents[3],    };    // 3. 因为我们在数组中只有两个颜色，所以我们首先需要指定的是渐变最开始的位置0。0f,接着指定他结束的位置1.0f，    CGFloat colorIndices[2] = {        0.0f, /*               color 0               */        1.0f, /*               color 1               */    };    // 4. 调用CGGradientCreateWithColorComonents函数    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, (CGFloat *)colorComponents, (CGFloat*)colorIndices, 2);    // 5. 释放色彩空间    CGColorSpaceRelease(colorSpace);    // 6. 绘制线性渐变    CGRect screenBounds = [UIScreen mainScreen].bounds;    CGPoint startPoint, endPoint;    startPoint = CGPointMake(120,260);    endPoint = CGPointMake(200.0f,220);    // kCGGradientDrawsAfterEndLocation 扩展整个渐变到渐变的终点之后的所有点 kCGGradientDrawsBeforeStartLocation 扩展整个渐变到渐变的起点之前的所有点    //  0 不扩展    CGContextDrawLinearGradient(currentContext, gradient, startPoint, endPoint, 0);    CGGradientRelease(gradient);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.46.05.png" alt=""></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="iOS-字典初始化的坑"><a href="#iOS-字典初始化的坑" class="headerlink" title="iOS 字典初始化的坑"></a>iOS 字典初始化的坑</h2><blockquote><p> 最近在做项目的时候遇到了一种崩溃原因，bugly反馈的崩溃信息是这样的<code>-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[1]JIZHANG + 289980</code></p></blockquote><p>我们采用的字典初始化方式是字面量的方式，他是iOS 6.0以后新支持的初始化方法</p><pre><code>NSDictionary *dictionary =@{@&quot;key1&quot; : value1,@&quot;key2&quot; : value2,@&quot;key3&quot; : value3};</code></pre><p>后来经过测试发现，如果value值为nil时会导致崩溃，崩溃信息和测试代码如下</p><ul><li><p>测试代码</p><pre><code>NSString *value = nil;           NSDictionary *params = @{@&quot;openid&quot;:value};</code></pre></li><li><p>崩溃信息<br><img src="/image/WX20180108-160235.png" alt=""><br>这种字典的初始化方式，要保证不会崩溃，就要对每一个value进行判断，确保不为nil时才插入数据。</p></li></ul><p>还有一种初始化方式是采用标准的初始化方式-以下这种方式当插入value值为nil时，之后的值并不会插入，但是不会崩溃</p><pre><code>NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:openid,@&quot;openid&quot;,nickname,@&quot;nickname&quot;,sex,@&quot;sex&quot;,headimgurl,@&quot;headimgurl&quot;,unionid,@&quot;unionid&quot;,nil];</code></pre>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;iOS-绘图&quot;&gt;&lt;a href=&quot;#iOS-绘图&quot; class=&quot;headerlink&quot; title=&quot;iOS 绘图&quot;&gt;&lt;/a&gt;iOS 绘图&lt;/h1&gt;&lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot; margi
+        &lt;h2 id=&quot;iOS-字典初始化的坑&quot;&gt;&lt;a href=&quot;#iOS-字典初始化的坑&quot; class=&quot;headerlink&quot; title=&quot;iOS 字典初始化的坑&quot;&gt;&lt;/a&gt;iOS 字典初始化的坑&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt; 最近在做项目的时候遇到了一种崩溃原因，b
       
     
     </summary>
@@ -95,7 +68,34 @@
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
-      <category term="绘图" scheme="http://yoursite.com/tags/%E7%BB%98%E5%9B%BE/"/>
+      <category term="踩过的坑" scheme="http://yoursite.com/tags/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS获取tabbarvc的bug</title>
+    <link href="http://yoursite.com/2018/01/11/iOS%E8%8E%B7%E5%8F%96tabbarvc%E7%9A%84%E5%9D%91/"/>
+    <id>http://yoursite.com/2018/01/11/iOS获取tabbarvc的坑/</id>
+    <published>2018-01-11T02:29:02.000Z</published>
+    <updated>2018-02-27T07:44:37.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="iOS-获取tabbar的rootViewController遇到的坑"><a href="#iOS-获取tabbar的rootViewController遇到的坑" class="headerlink" title="iOS 获取tabbar的rootViewController遇到的坑"></a>iOS 获取tabbar的rootViewController遇到的坑</h2><blockquote><p>大家获取tabbarVC通常有两种取法</p></blockquote><ul><li><p>一种是<code>JZTabBarViewController *tabVC = (JZTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;</code></p></li><li><p>另一种是<code>AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;  JZTabBarViewController *tabVC = (JZTabBarViewController *)appDelegate.window.rootViewController;</code></p></li></ul><p>之前我们项目中采用的是第一种方式取得，然后调用<code>tabVC.selectedIndex = 0</code>方法，上线之后<code>腾讯bugly</code>反馈了一个崩溃的<code>bug</code>，bug反馈信息为<code>-[UIViewController setSelectedIndex:]: unrecognized selector sent to instance 0x125da5d60</code>,这个方法是没有找到该方法，我猜可能是因为用第一种方法取的<code>viewcontroller</code>可能不是<code>tabbarvc</code>，因为我们在项目中有使用<code>[UIApplication sharedApplication].keyWindow</code>加过自定义的view，我猜可能是这个原因，当把加的自定义的view注释掉之后，以上两个方法都可以确保每次拿到的vc是<code>tabbarvc</code></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;iOS-获取tabbar的rootViewController遇到的坑&quot;&gt;&lt;a href=&quot;#iOS-获取tabbar的rootViewController遇到的坑&quot; class=&quot;headerlink&quot; title=&quot;iOS 获取tabbar的rootViewC
+      
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://yoursite.com/categories/iOS/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+      <category term="Bug" scheme="http://yoursite.com/tags/Bug/"/>
     
   </entry>
   
@@ -127,19 +127,19 @@
   </entry>
   
   <entry>
-    <title>iOS获取tabbarvc的bug</title>
-    <link href="http://yoursite.com/2017/11/30/iOS%E8%8E%B7%E5%8F%96tabbarvc%E7%9A%84%E5%9D%91/"/>
-    <id>http://yoursite.com/2017/11/30/iOS获取tabbarvc的坑/</id>
+    <title>iOS绘图</title>
+    <link href="http://yoursite.com/2017/11/30/iOS%E7%BB%98%E5%9B%BE/"/>
+    <id>http://yoursite.com/2017/11/30/iOS绘图/</id>
     <published>2017-11-30T02:29:02.000Z</published>
-    <updated>2018-01-08T05:36:07.000Z</updated>
+    <updated>2017-11-30T08:32:11.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="iOS-获取tabbar的rootViewController遇到的坑"><a href="#iOS-获取tabbar的rootViewController遇到的坑" class="headerlink" title="iOS 获取tabbar的rootViewController遇到的坑"></a>iOS 获取tabbar的rootViewController遇到的坑</h2><blockquote><p>大家获取tabbarVC通常有两种取法</p></blockquote><ul><li><p>一种是<code>JZTabBarViewController *tabVC = (JZTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;</code></p></li><li><p>另一种是<code>AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;  JZTabBarViewController *tabVC = (JZTabBarViewController *)appDelegate.window.rootViewController;</code></p></li></ul><p>之前我们项目中采用的是第一种方式取得，然后调用<code>tabVC.selectedIndex = 0</code>方法，上线之后<code>腾讯bugly</code>反馈了一个崩溃的<code>bug</code>，bug反馈信息为<code>-[UIViewController setSelectedIndex:]: unrecognized selector sent to instance 0x125da5d60</code>,这个方法是没有找到该方法，我猜可能是因为用第一种方法取的<code>viewcontroller</code>可能不是<code>tabbarvc</code>，因为我们在项目中有使用<code>[UIApplication sharedApplication].keyWindow</code>加过自定义的view，我猜可能是这个原因，当把加的自定义的view注释掉之后，以上两个方法都可以确保每次拿到的vc是<code>tabbarvc</code></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="iOS-绘图"><a href="#iOS-绘图" class="headerlink" title="iOS 绘图"></a>iOS 绘图</h1><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=0&id=438597206&auto=1&height=32"></iframe><blockquote><p>关于下面的绘制图形都是在<code>drawRect</code>方法中，所以我们需要建立一个类叫<code>CustonView</code>，继承于<code>UIView</code>，然后实现<code>drawRect</code>方法。</p></blockquote><h2 id="绘制一个字符串"><a href="#绘制一个字符串" class="headerlink" title="绘制一个字符串"></a>绘制一个字符串</h2><pre><code>UIFont *helveticacabold = [UIFont fontWithName:@&quot;HelveticaNeue-Bold&quot; size:40.f];    NSString *string = @&quot;some String&quot;;    NSDictionary *attibute = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:helveticacabold};    [string drawAtPoint:CGPointMake(40, 200) withAttributes:attibute];</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.34.44.png" alt=""></p><h2 id="将字符串画在一个矩形中"><a href="#将字符串画在一个矩形中" class="headerlink" title="将字符串画在一个矩形中"></a>将字符串画在一个矩形中</h2><pre><code>//画在一个矩形    UIFont *helveticacabold = [UIFont fontWithName:@&quot;HelveticaNeue-Bold&quot; size:40.f];    NSString *string = @&quot;some String&quot;;    NSDictionary *attibute = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:helveticacabold};    [string drawInRect:CGRectMake(40, 200, 100, 100) withAttributes:attibute];</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.36.57.png" alt=""></p><h2 id="获取color的分量信息"><a href="#获取color的分量信息" class="headerlink" title="获取color的分量信息"></a>获取color的分量信息</h2><pre><code>UIColor *steelBlueColor = [UIColor colorWithRed:0.3f green:0.4f blue:0.6f alpha:1.0f];   CGColorRef colorRef = steelBlueColor.CGColor;   const CGFloat *components = CGColorGetComponents(colorRef);   NSUInteger compentsCount = CGColorGetNumberOfComponents(colorRef);   NSUInteger count = 0;   for (count = 0; count &lt; compentsCount; count++) {       NSLog(@&quot;compenent %lu = %.02f&quot;,count+1,components[count]);   }</code></pre><h2 id="绘制线段"><a href="#绘制线段" class="headerlink" title="绘制线段"></a>绘制线段</h2><pre><code>// 1. 为图形上下文选择一个颜色    [[UIColor brownColor] set];    // 2. 获取图形上下文的句柄    CGContextRef currentContext = UIGraphicsGetCurrentContext();    // 3. 设置线条的宽度 第一个参数是当前图形上下文 ， 第二个是线条的宽度    CGContextSetLineWidth(currentContext, 10.0f);    // 4. 设置线条的起点    CGContextMoveToPoint(currentContext, 50.0f, 10.0f);    // 5. 设置终点    // 线    CGContextAddLineToPoint(currentContext, 100.0f, 200.0f);    // 矩形//    CGContextAddRect(currentContext, CGRectMake(50, 50, 100, 100));    // 6. 绘制上下文    CGContextStrokePath(currentContext);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.39.30.png" alt=""></p><h2 id="绘制一个X"><a href="#绘制一个X" class="headerlink" title="绘制一个X"></a>绘制一个X</h2><pre><code>// 1. 创建一个可变的句柄    CGMutablePathRef path = CGPathCreateMutable();    // 2. 充满屏幕    CGRect screenBounds = [UIScreen mainScreen].bounds;    // 3. 开始top-left    CGPathMoveToPoint(path, NULL, screenBounds.origin.x, screenBounds.origin.y);    CGPathAddLineToPoint(path, NULL, screenBounds.size.width, screenBounds.size.height);    // 4. 开始另一条线，top-right    CGPathMoveToPoint(path, NULL, screenBounds.size.width, screenBounds.origin.y);    // 5. 画线，form top-right to bottom-left    CGPathAddLineToPoint(path, NULL, screenBounds.origin.x, screenBounds.size.height);    // 6. 获取图形上下文    CGContextRef currentRef = UIGraphicsGetCurrentContext();    CGContextAddPath(currentRef, path);    [[UIColor blueColor] setStroke];    CGContextDrawPath(currentRef, kCGPathStroke);    CGPathRelease(path);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.40.04.png" alt=""></p><h2 id="绘制矩形"><a href="#绘制矩形" class="headerlink" title="绘制矩形"></a>绘制矩形</h2><pre><code>CGMutablePathRef path = CGPathCreateMutable();    CGRect rectangle = CGRectMake(10.0f, 10.0f, 200.0f, 300.0f);    CGPathAddRect(path, NULL, rectangle);    CGContextRef currentContext = UIGraphicsGetCurrentContext();    CGContextAddPath(currentContext, path);    //充满矩形的颜色    [[UIColor yellowColor] setFill];    //画线的颜色    [[UIColor brownColor] setStroke];    CGContextSetLineWidth(currentContext, 10.0f);    CGContextDrawPath(currentContext, kCGPathFillStroke);    CGPathRelease(path);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.41.24.png" alt=""></p><h2 id="为形状添加阴影"><a href="#为形状添加阴影" class="headerlink" title="为形状添加阴影"></a>为形状添加阴影</h2><pre><code>// 1. 获取图形上下文    CGContextRef currentContext = UIGraphicsGetCurrentContext();//     避免第二个矩形会被应用，需要保存上下文    CGContextSaveGState(currentContext);//     2. 设置阴影 参数： 1.图形上下文 2. 偏移量-偏移量相对于将要应用阴影的形状的右边和底部。x偏移量越大，阴影更向形状的右边延伸，y偏移量越大，阴影更向形状的底部延伸。 3. 应用到阴影的模糊值，·    CGContextSetShadowWithColor(currentContext, CGSizeMake(10.0f, 10.0f), 20.0f, [UIColor grayColor].CGColor);    CGMutablePathRef path = CGPathCreateMutable();    CGRect firstRect = CGRectMake(55.0f, 60.0f, 150.0f, 150.0f);    CGPathAddRect(path, NULL, firstRect);    CGContextAddPath(currentContext, path);    [[UIColor colorWithRed:0.20f green:0.60f blue:0.80f alpha:1.0f] setFill];    CGContextDrawPath(currentContext, kCGPathFill);    CGPathRelease(path);//    回到之前上下文的状态   避免第二个矩形会被应用，    CGContextRestoreGState(currentContext);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.44.02.png" alt=""></p><h2 id="创建和绘制渐变"><a href="#创建和绘制渐变" class="headerlink" title="创建和绘制渐变"></a>创建和绘制渐变</h2><pre><code>// 1. 创建色彩空间    CGContextRef currentContext = UIGraphicsGetCurrentContext();//    CGContextSaveGState(currentContext);    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();    UIColor *startColor = [UIColor orangeColor];    CGFloat *startColorComponents = (CGFloat *)CGColorGetComponents([startColor CGColor]);    UIColor *endColor = [UIColor blueColor];    CGFloat *endColorComponents = (CGFloat *)CGColorGetComponents([endColor CGColor]);    // 2. 获取开始颜色和终点颜色的分量之后，我们将他们放入一个扁平数组传递到CGGradientCreateWithColorComonents函数    CGFloat colorComponents[8] = {        startColorComponents[0],        startColorComponents[1],        startColorComponents[2],        startColorComponents[3],        //终点颜色分量        endColorComponents[0],        endColorComponents[1],        endColorComponents[2],        endColorComponents[3],    };    // 3. 因为我们在数组中只有两个颜色，所以我们首先需要指定的是渐变最开始的位置0。0f,接着指定他结束的位置1.0f，    CGFloat colorIndices[2] = {        0.0f, /*               color 0               */        1.0f, /*               color 1               */    };    // 4. 调用CGGradientCreateWithColorComonents函数    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, (CGFloat *)colorComponents, (CGFloat*)colorIndices, 2);    // 5. 释放色彩空间    CGColorSpaceRelease(colorSpace);    // 6. 绘制线性渐变    CGRect screenBounds = [UIScreen mainScreen].bounds;    CGPoint startPoint, endPoint;    startPoint = CGPointMake(120,260);    endPoint = CGPointMake(200.0f,220);    // kCGGradientDrawsAfterEndLocation 扩展整个渐变到渐变的终点之后的所有点 kCGGradientDrawsBeforeStartLocation 扩展整个渐变到渐变的起点之前的所有点    //  0 不扩展    CGContextDrawLinearGradient(currentContext, gradient, startPoint, endPoint, 0);    CGGradientRelease(gradient);</code></pre><p><img src="/image/屏幕快照 2017-11-30 10.46.05.png" alt=""></p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;iOS-获取tabbar的rootViewController遇到的坑&quot;&gt;&lt;a href=&quot;#iOS-获取tabbar的rootViewController遇到的坑&quot; class=&quot;headerlink&quot; title=&quot;iOS 获取tabbar的rootViewC
+        &lt;h1 id=&quot;iOS-绘图&quot;&gt;&lt;a href=&quot;#iOS-绘图&quot; class=&quot;headerlink&quot; title=&quot;iOS 绘图&quot;&gt;&lt;/a&gt;iOS 绘图&lt;/h1&gt;&lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot; margi
       
     
     </summary>
@@ -149,7 +149,7 @@
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
-      <category term="Bug" scheme="http://yoursite.com/tags/Bug/"/>
+      <category term="绘图" scheme="http://yoursite.com/tags/%E7%BB%98%E5%9B%BE/"/>
     
   </entry>
   
